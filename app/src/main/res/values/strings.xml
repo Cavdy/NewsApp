@@ -2,4 +2,7 @@
     <string name="app_name">News App</string>
     <string name="for_you">For You</string>
     <string name="textt"></string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

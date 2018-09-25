@@ -19,7 +19,9 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".ShowviewActivity" />
         <activity android:name=".ForeignNewsActivity" />
-        <activity android:name=".Showview2Activity"></activity>
+        <activity android:name=".Showview2Activity" />
+        <activity android:name=".LocalnewsActivity" />
+        <activity android:name=".SportnewsActivity"></activity>
     </application>
 
 </manifest>
