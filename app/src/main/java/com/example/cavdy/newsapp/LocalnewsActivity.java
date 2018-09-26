@@ -9,5 +9,10 @@ public class LocalnewsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_localnews);
+
+        //Using FragmentManager to Replace the Layout to Fragment
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container, new LocalnewsFragment())
+                .commit();
     }
 }

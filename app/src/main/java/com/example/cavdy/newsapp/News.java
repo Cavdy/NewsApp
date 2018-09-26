@@ -6,6 +6,11 @@ public class News {
     private String mUrl;
     private String mDate;
 
+    public News(String mTitle, String mUrl) {
+        this.mTitle = mTitle;
+        this.mUrl = mUrl;
+    }
+
     public News(String mTitle, String mAuthor, String mUrl, String mDate) {
         this.mTitle = mTitle;
         this.mAuthor = mAuthor;

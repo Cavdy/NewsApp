@@ -11,13 +11,18 @@
     <RelativeLayout
         android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="56dp"
         android:background="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <include layout="@layout/toolbar_layout" />
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/dailynewslogo"
+            android:contentDescription="@string/app_name"/>
 
     </RelativeLayout>
 
@@ -31,16 +36,16 @@
         app:layout_constraintTop_toBottomOf="@+id/relativeLayout"
         app:tabBackground="@android:color/white"
         app:tabGravity="fill"
-        app:tabIndicatorColor="@android:color/white"
+        app:tabIndicatorColor="@android:color/holo_blue_light"
+        app:tabSelectedTextColor="@android:color/holo_blue_light"
         app:tabMaxWidth="0dp"
         app:tabMode="fixed"
-        app:tabTextColor="@android:color/white" />
+        app:tabTextColor="#333333" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager_id"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tabLayout_id" />
