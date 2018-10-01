@@ -3,19 +3,21 @@ package com.example.cavdy.newsapp;
 public class News {
     private String mTitle;
     private String mAuthor;
-    private String mUrl;
+    public String mUrl;
     private String mDate;
+    private String mSection;
 
     public News(String mTitle, String mUrl) {
         this.mTitle = mTitle;
         this.mUrl = mUrl;
     }
 
-    public News(String mTitle, String mAuthor, String mUrl, String mDate) {
+    public News(String mTitle, String mAuthor, String mUrl, String mDate, String mSection) {
         this.mTitle = mTitle;
         this.mAuthor = mAuthor;
         this.mUrl = mUrl;
         this.mDate = mDate;
+        this.mSection = mSection;
     }
 
     public String getmTitle() {
@@ -48,5 +50,13 @@ public class News {
 
     public void setmDate(String mDate) {
         this.mDate = mDate;
+    }
+
+    public String getmSection() {
+        return mSection;
+    }
+
+    public void setmSection(String mSection) {
+        this.mSection = mSection;
     }
 }

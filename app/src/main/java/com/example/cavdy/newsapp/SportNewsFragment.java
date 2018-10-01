@@ -20,8 +20,9 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.cavdy.newsapp.Adapter.NewsAdapter;
-import com.example.cavdy.newsapp.Loader.NewsLoader;
+import com.example.cavdy.newsapp.Adapter.SportNewsAdapter;
+import com.example.cavdy.newsapp.Loader.LocalNewsLoader;
+import com.example.cavdy.newsapp.Loader.SportNewsLoader;
 
 import java.util.List;
 
@@ -32,13 +33,7 @@ import butterknife.ButterKnife;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ForeignNewsFragment extends Fragment implements LoaderManager.LoaderCallbacks<List<News>> {
-
-    public static final String LOG_TAG = ForeignNewsFragment.class.getName();
-
-    public ForeignNewsFragment() {
-        // Required empty public constructor
-    }
+public class SportNewsFragment extends Fragment implements LoaderManager.LoaderCallbacks<List<News>> {
 
     @BindView(R.id.listView)
     ListView listView;
@@ -47,19 +42,28 @@ public class ForeignNewsFragment extends Fragment implements LoaderManager.Loade
     @BindView(R.id.loading_indicator)
     ProgressBar loadingIndicator;
 
-    private NewsAdapter adapter;
+    private SportNewsAdapter adapter;
     private static int LOADER_ID = 0;
+
+    public static final String LOG_TAG = SportNewsFragment.class.getName();
+
+
+    public SportNewsFragment() {
+        // Required empty public constructor
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_foreign_news, container, false);
+        View view = inflater.inflate(R.layout.fragment_sport_news, container, false);
+
         ButterKnife.bind(this, view);
 
         listView.setEmptyView(mEmptyStateTextView);
 
-        adapter = new NewsAdapter(getActivity());
+        adapter = new SportNewsAdapter(getActivity());
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -89,7 +93,7 @@ public class ForeignNewsFragment extends Fragment implements LoaderManager.Loade
     @NonNull
     @Override
     public Loader<List<News>> onCreateLoader(int i, @Nullable Bundle bundle) {
-        return new NewsLoader(getActivity());
+        return new SportNewsLoader(getActivity());
     }
 
     @Override
@@ -108,4 +112,5 @@ public class ForeignNewsFragment extends Fragment implements LoaderManager.Loade
     public void onLoaderReset(@NonNull Loader<List<News>> loader) {
 
     }
+
 }

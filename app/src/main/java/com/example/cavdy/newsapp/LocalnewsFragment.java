@@ -1,20 +1,30 @@
 package com.example.cavdy.newsapp;
 
 
-import android.os.AsyncTask;
+import android.content.Context;
+import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
-import com.example.cavdy.newsapp.Adapter.ForeignnewsHorizontalRecyclerviewAdapter;
-import com.example.cavdy.newsapp.Adapter.ForeignnewsRecyclerviewAdapter;
-import com.example.cavdy.newsapp.Adapter.LocalnewsRecyclerviewAdapter;
+import com.example.cavdy.newsapp.Adapter.LocalNewsAdapter;
+import com.example.cavdy.newsapp.Adapter.SportNewsAdapter;
+import com.example.cavdy.newsapp.Loader.LocalNewsLoader;
+import com.example.cavdy.newsapp.Loader.SportNewsLoader;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -24,14 +34,17 @@ import butterknife.ButterKnife;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class LocalnewsFragment extends Fragment {
+public class LocalnewsFragment extends Fragment implements LoaderManager.LoaderCallbacks<List<News>> {
 
-    private static final String USGS_REQUEST_URL = "https://content.guardianapis.com/search?q=debate%20AND%20economy&tag=politics/politics&from-date=2014-01-01&api-key=1b4996a8-fa54-4f58-b7ac-2f68cd476e54";
+    @BindView(R.id.listView)
+    ListView listView;
+    @BindView(R.id.empty_view)
+    TextView mEmptyStateTextView;
+    @BindView(R.id.loading_indicator)
+    ProgressBar loadingIndicator;
 
-    @BindView(R.id.recyclerview)
-    RecyclerView recyclerView;
-
-    private LocalnewsRecyclerviewAdapter localnewsRecyclerviewAdapter;
+    private LocalNewsAdapter adapter;
+    private static int LOADER_ID = 0;
 
     public static final String LOG_TAG = LocalnewsFragment.class.getName();
 
@@ -47,32 +60,56 @@ public class LocalnewsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_localnews, container, false);
         ButterKnife.bind(this, view);
 
-        localnewsRecyclerviewAdapter = new LocalnewsRecyclerviewAdapter(getActivity(), new ArrayList<News>());
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(localnewsRecyclerviewAdapter);
+        listView.setEmptyView(mEmptyStateTextView);
 
-        LocalnewsFragment.NewsAsyncTask newsAsyncTask = new LocalnewsFragment.NewsAsyncTask();
-        newsAsyncTask.execute(USGS_REQUEST_URL);
+        adapter = new LocalNewsAdapter(getActivity());
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                News news = adapter.getItem(i);
+                String url = news.mUrl;
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(url));
+                startActivity(intent);
+            }
+        });
+        ConnectivityManager connMgr = (ConnectivityManager)
+                getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        // Get details on the currently active default data network
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        // If there is a network connection, fetch data
+        if (networkInfo != null && networkInfo.isConnected()) {
+            getLoaderManager().initLoader(LOADER_ID, null, this);
+        } else {
+            loadingIndicator.setVisibility(View.GONE);
+            mEmptyStateTextView.setText(R.string.no_internet_connection);
+        }
 
         return view;
     }
 
-    private class NewsAsyncTask extends AsyncTask<String, Void, List<News>> {
+    @NonNull
+    @Override
+    public Loader<List<News>> onCreateLoader(int i, @Nullable Bundle bundle) {
+        return new LocalNewsLoader(getActivity());
+    }
 
-        @Override
-        protected List<News> doInBackground(String... urls) {
-            if (urls.length < 1 || urls[0] == null) {
-                return null;
-            }
-
-            List<News> result = QueryUtils.fetchNewsData(urls[0]);
-            return result;
+    @Override
+    public void onLoadFinished(@NonNull Loader<List<News>> loader, List<News> news) {
+        if (news != null) {
+            adapter.setNotifyOnChange(false);
+            adapter.clear();
+            adapter.setNotifyOnChange(true);
+            adapter.addAll(news);
         }
+        mEmptyStateTextView.setText(R.string.no_data);
+        loadingIndicator.setVisibility(View.GONE);
+    }
 
-        @Override
-        protected void onPostExecute(List<News> news) {
-            super.onPostExecute(news);
-        }
+    @Override
+    public void onLoaderReset(@NonNull Loader<List<News>> loader) {
+
     }
 
 }
